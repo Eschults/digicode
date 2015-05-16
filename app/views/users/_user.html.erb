@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-xs-12">
+    <%= link_to "", user_path(user), class: 'link-user' if current_user.friends_with?(user) %>
+    <ul class="list-unstyled list-inline">
+      <li>
+        <%= image_tag user.picture, class: "img width-40 border-radius-2" %>
+      </li>
+      <li>
+        <h4>
+          <%= user.name %>
+        </h4>
+      </li>
+      <% if current_user.friends_with?(user) %>
+        <li class="pull-right">
+          <%= user.digicode %>
+        </li>
+      <% elsif current_user.pending_friends_with?(user) %>
+        <li class="pull-right">
+          Digicode asked
+        </li>
+      <% else %>
+        <li class="pull-right">
+          <%= link_to "Ask for digicode", "#", class: "btn btn-ask" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
