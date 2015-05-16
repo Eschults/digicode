@@ -2,12 +2,36 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable
 
   devise :omniauthable, :omniauth_providers => [ :facebook ]
 
   def friends
-    User.where("sender_id = :id OR receiver_id = :id AND accepted = true", id: id)
+    output = []
+    friendships.each { |friendship| friendship.sender == self ? (output << friendship.receiver) : (output << friendship.sender) }
+    output
+  end
+
+  def pending_friends
+    output = []
+    pending_friendships.each { |friendship| friendship.sender == self ? (output << friendship.receiver) : (output << friendship.sender) }
+    output
+  end
+
+  def friendships
+    Friendship.where("(sender_id = :id OR receiver_id = :id) AND accepted = true", id: id)
+  end
+
+  def pending_friendships
+    Friendship.where("(sender_id = :id OR receiver_id = :id)", id: id) - friendships
+  end
+
+  def friends_with?(user)
+    (friends.include? user) ? true : false
+  end
+
+  def pending_friends_with?(user)
+    (pending_friends.include? user) ? true : false
   end
 
   def self.find_for_facebook_oauth(auth)
