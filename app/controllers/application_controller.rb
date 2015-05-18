@@ -16,6 +16,14 @@ class ApplicationController < ActionController::Base
     devise_controller? || pages_controller?
   end
 
+  def after_sign_up_path_for(resource)
+    edit_user_path(resource) if request.env['omniauth.origin']
+  end
+
+  def after_sign_in_path_for(resource)
+    edit_user_path(resource) if (request.env['omniauth.origin'] && resource.digicode.nil?)
+  end
+
   def pages_controller?
     controller_name == "pages"  # Brought by the `high_voltage` gem
   end

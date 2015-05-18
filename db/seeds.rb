@@ -7,8 +7,8 @@ Bec = User.create(name: "Benoît Chennevière", digicode: "26B3", email: "benoit
 Rua = User.create(name: "Ruben Amram", digicode: "26B3", email: "ruben.amram@gmail.com")
 Fld = User.create(name: "Florence Desthieux", digicode: "25813", email: "florence.desthieux@gmail.com")
 Jel = User.create(name: "Jean Laverty", digicode: "25813", email: "jean.laverty@gmail.com")
-Jel = User.create(name: "Haris Mebarki", digicode: "1925B", email: "haris.mebarki@gmail.com")
+Har = User.create(name: "Haris Mebarki", digicode: "1925B", email: "haris.mebarki@gmail.com")
 
-Friendship.create(sender: User.find_by(name: "Edward Schults"), receiver: User.find(4), accepted: true)
-Friendship.create(sender: User.find_by(name: "Edward Schults"), receiver: User.find(5), accepted: true)
-Friendship.create(sender: User.find_by(name: "Edward Schults"), receiver: User.find(6))
+# Friendship.create(sender: User.find_by(name: "Edward Schults"), receiver: User.find(4), accepted: true)
+# Friendship.create(sender: User.find_by(name: "Edward Schults"), receiver: User.find(5), accepted: true)
+# Friendship.create(sender: User.find_by(name: "Edward Schults"), receiver: User.find(6))
