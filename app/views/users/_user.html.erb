@@ -11,11 +11,11 @@
         </h4>
       </li>
       <% if current_user.friends_with?(user) %>
-        <li class="pull-right padding-right-none">
+        <li class="pull-right padding-right-none margin-top-11">
           <%= user.digicode %>
         </li>
       <% elsif current_user.has_asked_friendship_to?(user) %>
-        <li class="pull-right padding-right-none">
+        <li class="pull-right padding-right-none margin-top-11">
           Digicode asked
         </li>
       <% elsif current_user.pending_friends_with?(user) %>
@@ -31,7 +31,9 @@
         </li>
       <% else %>
         <li class="pull-right padding-right-none">
-          <%= link_to "Ask for digicode", ask_for_code_user_path(user), method: :post, class: "btn btn-ask" %>
+          <%= link_to ask_for_code_user_path(user), method: :post, class: "btn btn-ask" do %>
+            Ask<span class="hidden-xs"> for digicode</span>
+          <% end %>
         </li>
       <% end %>
     </ul>

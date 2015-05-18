@@ -1,7 +1,7 @@
 class UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all.reject { |u| u == user }
+      scope.all.reject { |u| u == user }.sort_by(&:name)
     end
   end
 
