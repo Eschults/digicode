@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <%= form_for @user do |f| %>
+        <div class="form-group">
+          <%= f.label :digicode, "Digicode" %>
+          <%= f.text_field :digicode, class: "form-control" %>
+        </div>
+        <%= f.submit "Enregistrer", class: "btn btn-submit" %>
+      <% end %>
+    </div>
+  </div>
+</div>

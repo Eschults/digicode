@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     (pending_friends.include? user) ? true : false
   end
 
+  def has_asked_friendship_to?(user)
+    Friendship.find_by(sender_id: id, receiver_id: user.id) ? true : false
+  end
+
   def self.find_for_facebook_oauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.provider = auth.provider

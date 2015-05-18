@@ -16,13 +16,36 @@ class UsersController < ApplicationController
 
   def update
     authorize @user
+    if @user.update(user_params)
+      redirect_to user_path(@user)
+    else
+      render :edit
+    end
   end
 
   def ask_for_code
+    @friendship = Friendship.new(sender: current_user, receiver: @user)
+    if @friendship.save
+      redirect_to users_path
+    else
+      redirect_to :back
+    end
     authorize @user
   end
 
-  def answer
+  def accept_request
+    @friendship = Friendship.find_by(sender: @user, receiver: current_user)
+    @friendship.accepted = true
+    @friendship.save
+    redirect_to users_path
+    authorize @user
+  end
+
+  def decline_request
+    @friendship = Friendship.find_by(sender: @user, receiver: current_user)
+    @friendship.accepted = false
+    @friendship.save
+    redirect_to users_path
     authorize @user
   end
 
