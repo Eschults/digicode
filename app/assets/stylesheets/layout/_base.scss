@@ -30,7 +30,9 @@
 }
 
 .sent {
-  margin-top: 7px;
+  height: 40px;
+  display: table-cell;
+  vertical-align: middle
 }
 
 .scroll-x {
