@@ -21,7 +21,11 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    edit_user_path(resource) if (request.env['omniauth.origin'] && resource.digicode.nil?)
+    if (request.env['omniauth.origin'] && resource.digicode.nil?
+      edit_user_path(resource)
+    else
+      users_path
+    end
   end
 
   def pages_controller?
