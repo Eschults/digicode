@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
   def edit
     authorize @user
-    flash.now["notice"] = "Your code will be shared only to users you accepted / requested as friends"
+    flash.now["notice"] = "Your code will only be shared to users you accepted / asked as friends"
   end
 
   def update
