@@ -16,7 +16,7 @@
         </li>
       <% elsif current_user.has_asked_friendship_to?(user) %>
         <li class="pull-right padding-right-none margin-top-11">
-          Digicode asked
+          Request sent
         </li>
       <% elsif current_user.pending_friends_with?(user) %>
         <li class="pull-right padding-right-none">
@@ -32,7 +32,7 @@
       <% else %>
         <li class="pull-right padding-right-none">
           <%= link_to ask_for_code_user_path(user), method: :post, class: "btn btn-ask" do %>
-            Ask<span class="hidden-xs"> for digicode</span>
+            Add<span class="hidden-xs"> as friend</span>
           <% end %>
         </li>
       <% end %>

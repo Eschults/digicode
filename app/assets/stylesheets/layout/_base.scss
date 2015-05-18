@@ -4,3 +4,13 @@
  * Before writing in this file, look if there is not
  * already a Bootstrap SCSS variable that does the same job
  * ------------------------------------- */
+
+.panel-default {
+  border-radius: 9px;
+  border: 1px solid black;
+}
+
+.digicode {
+  font-size: 100px;
+  font-weight: bold;
+}
