@@ -14,3 +14,25 @@
   font-size: 100px;
   font-weight: bold;
 }
+
+.name {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 18px;
+  font-weight: bold;
+  // margin-top: 7px;
+  @media (max-width: 400px) {
+    // max-width: 120px;
+    overflow: hidden;
+    font-size: 14px;
+    // margin-top: 11px;
+  }
+}
+
+.sent {
+  margin-top: 7px;
+}
+
+.scroll-x {
+  overflow-x: scroll;
+}
