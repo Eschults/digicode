@@ -23,9 +23,15 @@
   // margin-top: 7px;
   @media (max-width: 400px) {
     // max-width: 120px;
-    overflow: hidden;
+    padding-left: 0;
     font-size: 14px;
     // margin-top: 11px;
+  }
+}
+
+@media (max-width: 400px) {
+  .list-inline>li {
+    padding-left: 0;
   }
 }
 
