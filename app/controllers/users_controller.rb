@@ -18,7 +18,8 @@ class UsersController < ApplicationController
   def update
     authorize @user
     if @user.update(user_params)
-      redirect_to user_path(@user)
+      redirect_to users_path
+      flash.now["notice"] = "Your code has been saved"
     else
       render :edit
     end
