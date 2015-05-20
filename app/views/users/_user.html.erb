@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-xs-12 margin-top-15">
     <%= link_to "", user_path(user), class: 'link-user' if current_user.friends_with?(user) %>
-    <div class="col-xs-10 scroll-x">
+    <div class="col-xs-10">
       <ul class="list-unstyled list-inline">
         <li>
           <%= image_tag user.picture, class: "img width-40 border-radius-2" %>
