@@ -60,6 +60,23 @@
   border-top-left-radius: 9px;
 }
 
+.navbar-nav > li > .dropdown-menu:before{
+  background: white;
+  height: 10px;
+  width: 10px;
+  content: "\00a0";
+  display: block;
+  left: 90%;
+  margin-left: -5px;
+  position: absolute;
+  bottom: 90px; // 28 * nb of lines + 12 + 6
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  border-top: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
+  z-index: -1;
+}
+
 .img-avatar {
   width: 40px;
   margin: 0 auto;
