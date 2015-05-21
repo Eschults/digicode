@@ -1,8 +1,11 @@
 .link-user {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: -10px;
+  left: -10px;
+  right: -10px;
   bottom: 0;
   z-index: 1;
+  &:hover {
+    background-color: rgba(220, 220, 220, 0.1)
+  }
 }
