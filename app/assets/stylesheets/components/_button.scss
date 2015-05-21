@@ -32,6 +32,10 @@
     &:hover {
       color: black;
     }
+    @media (max-width: 400px) {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
   }
   &-yes {
     margin: 0 0 0 8px;
@@ -43,6 +47,11 @@
     &:hover {
       color: black;
     }
+    @media (max-width: 400px) {
+      padding-left: 8px;
+      padding-right: 8px;
+      margin-left: 0;
+    }
   }
   &-no {
     margin: 0 0 0 0;
@@ -53,6 +62,10 @@
     color: black;
     &:hover {
       color: black;
+    }
+    @media (max-width: 400px) {
+      padding-left: 10px;
+      padding-right: 10px;
     }
   }
   &-submit {
