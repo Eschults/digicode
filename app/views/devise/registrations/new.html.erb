@@ -1,0 +1,15 @@
+<%= content_for(:title) do %>
+  Digicode
+<% end %>
+
+<%= content_for(:description) do %>
+  Connect with facebook to access your friends digicodes
+<% end %>
+
+<%= content_for(:after_js) do %>
+  <%= javascript_tag do %>
+    $(document).ready(function() {
+      $('.slide-down').slideDown();
+    })
+  <% end %>
+<% end %>
