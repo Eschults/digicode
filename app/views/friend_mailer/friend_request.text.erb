@@ -1,3 +1,9 @@
-FriendMailer#friend_request
+Hi <%= @friendship.receiver.name.split(' ').first %>,
 
-<%= @greeting %>, find me in app/views/friend_mailer/friend_request.text.erb
+<%= @friendship.sender.name %> sent you a friend request on Digicode!
+
+<%= link_to users_url do %>
+  Go to Digicode
+<% end %>
+
+Digicode's team
