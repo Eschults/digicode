@@ -1,4 +1,5 @@
 class FriendMailer < ApplicationMailer
+  default from: '"Digicode" <edward.schults@gmail.com>'
 
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
@@ -8,6 +9,6 @@ class FriendMailer < ApplicationMailer
   def friend_request(friendship)
     @friendship = friendship
 
-    mail to: @friendship.receiver.email, subjet: "#{@friendship.sender.name} vous a ajouté en ami sur Digicode", from: "Digicode '<edward.schults@gmail.com>'"
+    mail to: @friendship.receiver.email, subjet: "#{@friendship.sender.name} vous a ajouté en ami sur Digicode"
   end
 end
