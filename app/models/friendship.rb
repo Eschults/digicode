@@ -15,6 +15,6 @@ class Friendship < ActiveRecord::Base
   private
 
   def send_friend_request_email
-    FriendMailer.friend_request(self).deliver
+    FriendMailer.friend_request(self).deliver unless receiver.email.nil?
   end
 end
