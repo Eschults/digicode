@@ -17,7 +17,7 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
-  def decline_request
+  def decline_request?
     true
   end
 

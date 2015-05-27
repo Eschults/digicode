@@ -22,19 +22,19 @@
             Sent
           </li>
         <% elsif current_user.pending_friends_with?(user) %>
-          <li class="pull-right padding-right-none">
-            <%= link_to decline_request_user_path(user), method: :post, class: "btn btn-no" do %>
+          <li class="pull-right padding-right-none" id="<%= "no_#{user.id}" %>">
+            <%= link_to decline_request_user_path(user), method: :post, remote: true, class: "btn btn-no" do %>
               <i class="fa fa-close"></i>
             <% end %>
           </li>
-          <li class="pull-right">
-            <%= link_to accept_request_user_path(user), method: :post, class: "btn btn-yes" do %>
+          <li class="pull-right" id="<%= "yes_#{user.id}" %>">
+            <%= link_to accept_request_user_path(user), method: :post, remote: true, class: "btn btn-yes" do %>
               <i class="fa fa-check"></i>
             <% end %>
           </li>
         <% else %>
-          <li class="pull-right padding-right-none">
-            <%= link_to ask_for_code_user_path(user), method: :post, class: "btn btn-ask" do %>
+          <li class="pull-right padding-right-none" id="<%= "ask_#{user.id}" %>">
+            <%= link_to ask_for_code_user_path(user), method: :post, remote: true, class: "btn btn-ask" do %>
               Add<span class="hidden-xs"> as friend</span>
             <% end %>
           </li>

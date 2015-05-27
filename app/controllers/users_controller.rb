@@ -28,7 +28,10 @@ class UsersController < ApplicationController
   def ask_for_code
     @friendship = Friendship.new(sender: current_user, receiver: @user)
     if @friendship.save
-      redirect_to users_path
+      respond_to do |format|
+        format.html { redirect_to users_path }
+        format.js
+      end
     else
       redirect_to :back
     end
@@ -38,16 +41,28 @@ class UsersController < ApplicationController
   def accept_request
     @friendship = Friendship.find_by(sender: @user, receiver: current_user)
     @friendship.accepted = true
-    @friendship.save
-    redirect_to users_path
+    if @friendship.save
+      respond_to do |format|
+        format.html { redirect_to users_path }
+        format.js
+      end
+    else
+      redirect_to :back
+    end
     authorize @user
   end
 
   def decline_request
     @friendship = Friendship.find_by(sender: @user, receiver: current_user)
     @friendship.accepted = false
-    @friendship.save
-    redirect_to users_path
+    if @friendship.save
+      respond_to do |format|
+        format.html { redirect_to users_path }
+        format.js
+      end
+    else
+      redirect_to :back
+    end
     authorize @user
   end
 

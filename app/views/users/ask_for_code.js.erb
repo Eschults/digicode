@@ -1,0 +1,5 @@
+<% if @friendship.errors.any? %>
+
+<% else %>
+  $("<%= "#ask_#{@friendship.receiver.id}" %>").html('Sent');
+<% end %>

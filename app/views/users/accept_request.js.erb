@@ -1,0 +1,6 @@
+<% if @friendship.errors.any? %>
+
+<% else %>
+  $("<%= "#yes_#{@friendship.sender.id}" %>").addClass('padding-right-none').addClass('sent').html('<%= @friendship.sender.digicode %>');
+  $("<%= "#no_#{@friendship.sender.id}" %>").remove();
+<% end %>
