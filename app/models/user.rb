@@ -6,6 +6,12 @@ class User < ActiveRecord::Base
 
   devise :omniauthable, :omniauth_providers => [ :facebook ]
 
+  include AlgoliaSearch
+
+  algoliasearch index_name: "#{self}#{ENV['ALGOLIA_SUFFIX']}" do
+    attributesToIndex ['name']
+  end
+
   def friends
     output = []
     friendships.each { |friendship| friendship.sender == self ? (output << friendship.receiver) : (output << friendship.sender) }
