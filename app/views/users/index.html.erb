@@ -9,9 +9,54 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 padding-sides-15">
-      <% @users.each do |user| %>
-        <%= render 'user', user: user %>
-      <% end %>
+      <div class="search-bar">
+        <div class="input-group input-group m-t">
+          <input type="text" name="q" id="q" autocomplete="off" spellcheck="false" autocorrect="false" class="form-control string" placeholder="Type someone's name..." />
+          <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 padding-sides-15">
+      <div class="users" id="hits">
+      </div>
     </div>
   </div>
 </div>
+
+<%= content_for(:after_js) do %>
+  <script type="text/template" id="hit-template">
+    <div class="hit media">
+      <a class="pull-left" href="{{ url }}">
+        <img class="media-object" src="{{ image }}" alt="{{ name }}">
+      </a>
+      <div class="media-body">
+        <h3 class="hit_price pull-right text-right text-danger">
+          ${{ salePrice }}
+        </h3>
+        <h4 class="hit_name">{{{ _highlightResult.name.value }}}</h4>
+        <p>
+          {{{ _highlightResult.shortDescription.value }}}
+        </p>
+        <ul class="hit_tags list-inline">
+          {{#_highlightResult.manufacturer}}<li>{{{ _highlightResult.manufacturer.value }}}</li>{{/_highlightResult.manufacturer}}
+          {{#_highlightResult.category}}<li>{{{ _highlightResult.category.value }}}</li>{{/_highlightResult.category}}
+          {{#type}}<li>{{{ type }}}</li>{{/type}}
+          <!-- TODO TODO Use Bootstrap labels here -->
+        </ul>
+      </div>
+    </div>
+  </script>
+  <!-- Hogan -->
+  <script src="//cdn.jsdelivr.net/hogan.js/3.0.0/hogan.common.js"></script>
+  <!-- Algolia -->
+  <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+  <script src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>
+  <%= javascript_tag do %>
+    initAlgolia(
+      '<%= ENV['ALGOLIA_APPLICATION_ID'] %>',
+      '<%= ENV['ALGOLIA_SEARCH_ONLY_API_KEY'] %>',
+      'User<%= ENV['ALGOLIA_SUFFIX']%>',
+      "<%= user_path(id: ":id") %>",
+    );
+  <% end %>
+<% end %>

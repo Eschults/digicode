@@ -1,0 +1,159 @@
+function initAlgolia(
+  applicationId,
+  searchOnlyApiKey,
+  indexName,
+  userPath
+) {
+  // Replace the following values by your ApplicationID and ApiKey.
+  var algolia = new AlgoliaSearch(
+    applicationId,
+    searchOnlyApiKey
+  );
+
+  var $hits = $('#hits');
+  var $q = $('#q');
+  var $hitTemplate = Hogan.compile($('#hit-template').text());
+
+  var helper = new AlgoliaSearchHelper(algolia, indexName, {
+    // list of conjunctive facets (link to refine)
+    facets: [],
+    // list of disjunctive facets (checkbox to refine)
+    disjunctiveFacets: [],
+    // number of results per page
+    hitsPerPage: 100
+  });
+
+  function sortByCountDesc(a, b) { return b.count - a.count; }
+  function sortByNumAsc(a, b) { return parseInt(a.label) - parseInt(b.label); }
+  var FACETS = [];
+
+  var refinements = {};
+  var minReviewsCount = 0;
+
+
+  function searchCallback(success, content) {
+    if (!success || content.query !== $q.val()) {
+      // do not consider the result if there is an error
+      // or if it is outdated -> query != $q.val()
+      return;
+    }
+
+    var html = '';
+
+    for (var i = 0; i < content.hits.length; ++i) {
+      var user_url = userPath.replace(":id", content.hits[i].id);
+      content.hits[i].user_url = user_url;
+      html += $hitTemplate.render(content.hits[i]);
+    }
+    $hits.html(html);
+
+    // update URL anchor
+    var refinements = [];
+    for (var refine in helper.refinements) {
+      if (helper.refinements[refine]) {
+        var i = refine.indexOf(':');
+        var r = {};
+        r[refine.slice(0, i)] = refine.slice(i + 1);
+        refinements.push(r);
+      }
+    }
+    for (var refine in helper.disjunctiveRefinements) {
+      for (var value in helper.disjunctiveRefinements[refine]) {
+        if (helper.disjunctiveRefinements[refine][value]) {
+          var r = {};
+          r[refine] = value;
+          refinements.push(r);
+        }
+      }
+    }
+    location.replace('#q=' + encodeURIComponent(content.query) + '&page=' + content.page + '&minReviewsCount=' + minReviewsCount + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)));
+
+    // scroll on top
+    window.scrollTo(0, 0);
+  }
+
+  // perform a search
+  function search() {
+
+    var params = {
+      // retrieve maximum 50 values per facet to display the "more" link
+      maxValuesPerFacet: 50
+    };
+    // plug review_count slider refinement
+    if (minReviewsCount > 0) {
+      params.numericFilters = 'customerReviewCount>=' + minReviewsCount;
+    }
+    // if we're sorting by something,
+    // make the typo-tolerance more strict
+    if (helper.index != indexName) {
+      // disable if not the "default" index (sort by price, etc...)
+      params.typoTolerance = false;
+    }
+
+    // perform the query
+    helper.search($q.val(), searchCallback, {
+    });
+  }
+
+  // init: fetch anchor params and init the associated variables
+  if (location.hash && location.hash.indexOf('#q=') === 0) {
+    var params = location.hash.substring(3);
+    var pageParamOffset = params.indexOf('&page=');
+    var minReviewsCountParamOffset = params.indexOf('&minReviewsCount=');
+    var refinementsParamOffset = params.indexOf('&refinements=');
+
+    var q = decodeURIComponent(params.substring(0, pageParamOffset));
+    var page = parseInt(params.substring(pageParamOffset + 6, minReviewsCountParamOffset));
+    minReviewsCount = parseInt(params.substring(minReviewsCountParamOffset + 17, refinementsParamOffset));
+    var refinements = JSON.parse(decodeURIComponent(params.substring(refinementsParamOffset + 13)));
+
+    $q.val(q);
+    for (var i = 0; i < refinements.length; ++i) {
+      for (var refine in refinements[i]) {
+        helper.toggleRefine(refine, refinements[i][refine]);
+      }
+    }
+    helper.setPage(page);
+  }
+
+
+  // input binding
+  var lastQuery = $q.val();
+  $q.on('keyup change', function() {
+    if ($q.val() != lastQuery) {
+      lastQuery = $q.val();
+      // performing a new full-text query reset the pagination and the refinements
+      minReviewsCount = 0;
+      helper.setPage(0);
+      helper.clearRefinements();
+      search();
+    }
+  }).focus();
+
+  // load results
+  search();
+
+  // click binding
+  window.showMoreLess = function(link) {
+    $(link).closest('ul').find('.show-more').toggle();
+  };
+  window.toggleRefine = function(facet, value) {
+    // refinining a facet reset the pagination
+    helper.setPage(0);
+    helper.toggleRefine(facet, value);
+  };
+  window.gotoPage = function(page) {
+    helper.gotoPage(+page - 1);
+  };
+
+  window.sortBy = function(index_suffic, link) {
+    $(link).closest('.btn-group').find('.sort-by').text($(link).text());
+    // set target index name
+    helper.index = indexName + index_suffic;
+    // reset page
+    helper.setPage(0);
+    // perform the query
+    search();
+  };
+
+}

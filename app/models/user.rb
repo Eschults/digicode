@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   include AlgoliaSearch
 
   algoliasearch index_name: "#{self}#{ENV['ALGOLIA_SUFFIX']}" do
-    attributesToIndex ['name']
+    attributesToIndex ['name', 'picture']
   end
 
   def friends
