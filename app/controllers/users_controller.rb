@@ -26,7 +26,15 @@ class UsersController < ApplicationController
   end
 
   def ask_for_code
-    @friendship = Friendship.new(sender: current_user, receiver: @user)
+    if Friendship.find_by(sender: current_user, receiver: @user)
+      @friendship = Friendship.find_by(sender: current_user, receiver: @user)
+      @friendship.accepted = nil
+    elsif Friendship.find_by(sender: @user, receiver: current_user)
+      @friendship = Friendship.find_by(sender: @user, receiver: current_user)
+      @friendship.accepted = nil
+    else
+      @friendship = Friendship.new(sender: current_user, receiver: @user)
+    end
     if @friendship.save
       respond_to do |format|
         format.html { redirect_to users_path }

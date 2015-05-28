@@ -17,46 +17,88 @@
       </div>
     </div>
     <div class="col-xs-12 padding-sides-15">
-      <div class="users" id="hits">
+      <div id="hits">
       </div>
     </div>
   </div>
 </div>
 
 <%= content_for(:after_js) do %>
-  <script type="text/template" id="hit-template">
-    <div class="hit media">
-      <a class="pull-left" href="{{ url }}">
-        <img class="media-object" src="{{ image }}" alt="{{ name }}">
-      </a>
-      <div class="media-body">
-        <h3 class="hit_price pull-right text-right text-danger">
-          ${{ salePrice }}
-        </h3>
-        <h4 class="hit_name">{{{ _highlightResult.name.value }}}</h4>
-        <p>
-          {{{ _highlightResult.shortDescription.value }}}
-        </p>
-        <ul class="hit_tags list-inline">
-          {{#_highlightResult.manufacturer}}<li>{{{ _highlightResult.manufacturer.value }}}</li>{{/_highlightResult.manufacturer}}
-          {{#_highlightResult.category}}<li>{{{ _highlightResult.category.value }}}</li>{{/_highlightResult.category}}
-          {{#type}}<li>{{{ type }}}</li>{{/type}}
-          <!-- TODO TODO Use Bootstrap labels here -->
-        </ul>
-      </div>
-    </div>
   </script>
   <!-- Hogan -->
   <script src="//cdn.jsdelivr.net/hogan.js/3.0.0/hogan.common.js"></script>
   <!-- Algolia -->
-  <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
-  <script src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/algoliasearch/latest/algoliasearch.js"></script>
+  <script type="text/template" id="hit-template">
+    <div class="row" id="user_{{ objectID }}">
+      <div class="col-xs-12 margin-top-15">
+        {{#friends}}
+          <a class="link-user" href="{{ user_url }}"></a>
+        {{/friends}}
+        <div class="col-xs-9">
+          <ul class="list-unstyled list-inline">
+            <li>
+              <img class="img width-40 border-radius-2" src="{{ picture }}" alt="{{ name }}" >
+            </li>
+            <li class="name">
+               {{{ _highlightResult.name.value }}}
+            </li>
+          </ul>
+        </div>
+        <div class="col-xs-3">
+          <ul class="list-unstyled list-inline height-40">
+            {{#friends}}
+              <li class="pull-right padding-right-none sent">
+                {{ digicode }}
+              </li>
+            {{/friends}}
+            {{^friends}}
+              {{#hasAsked}}
+                <li class="pull-right padding-right-none sent">
+                  Sent
+                </li>
+              {{/hasAsked}}
+              {{^hasAsked}}
+                {{#wasAsked}}
+                  <li class="pull-right padding-right-none" id="no_{{ objectID }}">
+                    <a href="{{ decline_url }}", data-method="post"data-remote=true class="btn btn-no">
+                      <i class="fa fa-close"></i>
+                    </a>
+                  </li>
+                  <li class="pull-right" id="yes_{{ objectID }}">
+                    <a href="{{ accept_url }}" data-method="post" data-remote=true class="btn btn-yes">
+                      <i class="fa fa-check"></i>
+                    </a>
+                  </li>
+                {{/wasAsked}}
+                {{^wasAsked}}
+                  <li class="pull-right padding-right-none" id="ask_{{ objectID }}">
+                    <a href="{{ ask_url }}" data-method="post" data-remote=true class="btn btn-ask">
+                      Add<span class="hidden-xs"> as friend</span>
+                    </a>
+                  </li>
+                {{/wasAsked}}
+              {{/hasAsked}}
+            {{/friends}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </script>
   <%= javascript_tag do %>
-    initAlgolia(
-      '<%= ENV['ALGOLIA_APPLICATION_ID'] %>',
-      '<%= ENV['ALGOLIA_SEARCH_ONLY_API_KEY'] %>',
-      'User<%= ENV['ALGOLIA_SUFFIX']%>',
-      "<%= user_path(id: ":id") %>",
-    );
+    $(document).ready(function() {
+      initAlgolia(
+        '<%= ENV['ALGOLIA_APPLICATION_ID'] %>',
+        '<%= ENV['ALGOLIA_SEARCH_ONLY_API_KEY'] %>',
+        'User<%= ENV['ALGOLIA_SUFFIX']%>',
+        "<%= user_path(id: ":id") %>",
+        "<%= ask_for_code_user_path(id: ":id") %>",
+        "<%= accept_request_user_path(id: ":id") %>",
+        "<%= decline_request_user_path(id: ":id") %>",
+        '<%= current_user.friends.map { |f| f.id } %>',
+        '<%= current_user.users_i_asked.map { |f| f.id } %>',
+        '<%= current_user.users_who_asked_me.map { |f| f.id } %>'
+      );
+    })
   <% end %>
 <% end %>

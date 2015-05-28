@@ -9,12 +9,25 @@ class User < ActiveRecord::Base
   include AlgoliaSearch
 
   algoliasearch index_name: "#{self}#{ENV['ALGOLIA_SUFFIX']}" do
-    attributesToIndex ['name', 'picture']
+    attribute :name, :picture, :digicode
+    attributesToIndex ['name']
   end
 
   def friends
     output = []
     friendships.each { |friendship| friendship.sender == self ? (output << friendship.receiver) : (output << friendship.sender) }
+    output
+  end
+
+  def users_who_asked_me
+    output = []
+    pending_friendships.each { |friendship| output << friendship.sender if friendship.receiver == self }
+    output
+  end
+
+  def users_i_asked
+    output = []
+    pending_friendships.each { |friendship| output << friendship.receiver if friendship.sender == self }
     output
   end
 
@@ -28,8 +41,12 @@ class User < ActiveRecord::Base
     Friendship.where("(sender_id = :id OR receiver_id = :id) AND accepted = true", id: id)
   end
 
+  def declined_friendships
+    Friendship.where("(sender_id = :id OR receiver_id = :id) AND accepted = false", id: id)
+  end
+
   def pending_friendships
-    Friendship.where("(sender_id = :id OR receiver_id = :id)", id: id) - friendships
+    Friendship.where("(sender_id = :id OR receiver_id = :id)", id: id) - friendships - declined_friendships
   end
 
   def friends_with?(user)

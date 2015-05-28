@@ -42,3 +42,15 @@
 .scroll-x {
   overflow-x: scroll;
 }
+
+.form-control,
+.form-control:focus {
+  box-shadow: none;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+em {
+  color: #3A5795;
+  font-style: normal;
+}

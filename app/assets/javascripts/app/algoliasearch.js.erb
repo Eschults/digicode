@@ -2,7 +2,13 @@ function initAlgolia(
   applicationId,
   searchOnlyApiKey,
   indexName,
-  userPath
+  userPath,
+  askForCodePath,
+  acceptPath,
+  declinePath,
+  friendsIDs,
+  hasAskedFriendsIDs,
+  wasAskedFriendsIDs
 ) {
   // Replace the following values by your ApplicationID and ApiKey.
   var algolia = new AlgoliaSearch(
@@ -20,7 +26,7 @@ function initAlgolia(
     // list of disjunctive facets (checkbox to refine)
     disjunctiveFacets: [],
     // number of results per page
-    hitsPerPage: 100
+    // hitsPerPage: 100
   });
 
   function sortByCountDesc(a, b) { return b.count - a.count; }
@@ -38,11 +44,50 @@ function initAlgolia(
       return;
     }
 
-    var html = '';
 
+    // Scan all hits and display them
+    var html = '';
     for (var i = 0; i < content.hits.length; ++i) {
-      var user_url = userPath.replace(":id", content.hits[i].id);
+      var user_url = userPath.replace(":id", content.hits[i].objectID);
       content.hits[i].user_url = user_url;
+      var friendsArray = JSON.parse(friendsIDs);
+      var friends;
+      if(friendsArray.indexOf(parseInt(content.hits[i].objectID)) > -1) {
+        friends = true;
+        content.hits[i].friends = friends;
+      } else {
+        friends = false;
+        content.hits[i].friends = friends;
+      }
+      var hasAskedArray = JSON.parse(hasAskedFriendsIDs);
+      var hasAsked;
+      if(hasAskedArray.indexOf(parseInt(content.hits[i].objectID)) > -1) {
+        hasAsked = true;
+        content.hits[i].hasAsked = hasAsked;
+      } else {
+        hasAsked = false;
+        content.hits[i].hasAsked = hasAsked;
+      }
+      var wasAskedArray = JSON.parse(wasAskedFriendsIDs);
+      var wasAsked;
+      if(wasAskedArray.indexOf(parseInt(content.hits[i].objectID)) > -1) {
+        wasAsked = true;
+        content.hits[i].wasAsked = wasAsked;
+      } else {
+        wasAsked = false;
+        content.hits[i].wasAsked = wasAsked;
+      }
+      var ask_url = askForCodePath.replace(":id", content.hits[i].objectID);
+      content.hits[i].ask_url = ask_url;
+      var accept_url = acceptPath.replace(":id", content.hits[i].objectID);
+      content.hits[i].accept_url = accept_url;
+      var decline_url = declinePath.replace(":id", content.hits[i].objectID);
+      content.hits[i].decline_url = decline_url;
+      var hit = content.hits[i];
+
+      // For example, display all properties that have at least
+      // one highlighted word (matchLevel = full or partial)
+
       html += $hitTemplate.render(content.hits[i]);
     }
     $hits.html(html);
@@ -124,7 +169,6 @@ function initAlgolia(
       lastQuery = $q.val();
       // performing a new full-text query reset the pagination and the refinements
       minReviewsCount = 0;
-      helper.setPage(0);
       helper.clearRefinements();
       search();
     }
