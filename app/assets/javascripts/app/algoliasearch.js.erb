@@ -2,6 +2,7 @@ function initAlgolia(
   applicationId,
   searchOnlyApiKey,
   indexName,
+  myID,
   userPath,
   askForCodePath,
   acceptPath,
@@ -88,7 +89,9 @@ function initAlgolia(
       // For example, display all properties that have at least
       // one highlighted word (matchLevel = full or partial)
 
-      html += $hitTemplate.render(content.hits[i]);
+      if(myID != content.hits.objectID) {
+        html += $hitTemplate.render(content.hits[i]);
+      }
     }
     $hits.html(html);
 

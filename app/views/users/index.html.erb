@@ -91,6 +91,7 @@
         '<%= ENV['ALGOLIA_APPLICATION_ID'] %>',
         '<%= ENV['ALGOLIA_SEARCH_ONLY_API_KEY'] %>',
         'User<%= ENV['ALGOLIA_SUFFIX']%>',
+        '<%= current_user.id %>',
         "<%= user_path(id: ":id") %>",
         "<%= ask_for_code_user_path(id: ":id") %>",
         "<%= accept_request_user_path(id: ":id") %>",
