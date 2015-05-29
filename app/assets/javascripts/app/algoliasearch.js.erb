@@ -89,7 +89,7 @@ function initAlgolia(
       // For example, display all properties that have at least
       // one highlighted word (matchLevel = full or partial)
 
-      if(myID != parseInt(content.hits.objectID)) {
+      if(parseInt(myID) != parseInt(content.hits[i].objectID)) {
         html += $hitTemplate.render(content.hits[i]);
       }
     }
