@@ -1,5 +1,5 @@
 class FriendMailer < ApplicationMailer
-  default from: '"Digicode" <edward.schults@gmail.com>'
+  default from: '"Digicode" <edward.schults@lovely-hood.com>'
 
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
