@@ -7,4 +7,7 @@ Rails.application.routes.draw do
       post :decline_request, to: "users#decline_request"
     end
   end
+  authenticated :user do
+    root to: "users#index"
+  end
 end
