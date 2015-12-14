@@ -8,6 +8,6 @@ Rails.application.routes.draw do
     end
   end
   authenticated :user do
-    root to: "users#index"
+    root to: "users#index", as: :authenticated_root
   end
 end
