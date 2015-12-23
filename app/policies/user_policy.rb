@@ -24,4 +24,8 @@ class UserPolicy < ApplicationPolicy
   def show?
     user.friends.include?(record) || user.admin? || user == record
   end
+
+  def api?
+    user.admin?
+  end
 end
