@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, except: :index
-  after_action :verify_authorized, except: :index, unless: :devise_controller?
+  before_action :set_user, except: [:index, :api]
+  after_action :verify_authorized, except: [:index, :api], unless: :devise_controller?
 
   def index
     @users = policy_scope(User)
@@ -72,6 +72,10 @@ class UsersController < ApplicationController
       redirect_to :back
     end
     authorize @user
+  end
+
+  def api
+    @users = User.all.reject { |u| u == current_user }.sort_by(&:name)
   end
 
   private

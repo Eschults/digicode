@@ -24,6 +24,7 @@ gem "rails-i18n"
 gem "devise-i18n"
 gem "devise-i18n-views"
 gem "algoliasearch-rails"
+gem "jbuilder"
 
 group :development, :test do
   gem "spring"
